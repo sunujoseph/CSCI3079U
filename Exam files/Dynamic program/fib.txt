@@ -1,0 +1,33 @@
+package com.java.fib;
+
+import java.math.BigInteger;
+import java.util.HashMap;
+
+public class Fibonaci {
+
+    public static void main(String[] args) {
+        System.out.println(" number ");
+        long startTime = System.currentTimeMillis();
+        HashMap<Integer, BigInteger> memoized = new HashMap<Integer, BigInteger>();
+         fibonanci(220, memoized);
+        System.out.println(" Total Time "
+                + (System.currentTimeMillis() - startTime));
+    }
+
+    private static BigInteger fibonanci(int n, HashMap<Integer, BigInteger> memoized) {
+        if (memoized.containsKey(n)) {
+            return memoized.get(n);
+        }
+        if (n <= 0) {
+             return BigInteger.ZERO;
+        }
+        if (n <= 2) {
+            return BigInteger.ONE;
+        } else {
+            BigInteger  febonani = fibonanci(n - 1, memoized).add (fibonanci(n - 2, memoized));
+            System.out.println(" febonani " + febonani);
+                memoized.put(n, febonani);
+            return febonani;
+        }
+    }
+}

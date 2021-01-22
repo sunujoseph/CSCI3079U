@@ -1,0 +1,68 @@
+/*
+	Program to determine Maximum and Minimum Number using Divide and Conquer Method in Java
+	Author: PracsPedia		www.pracspedia.com 
+*/
+import java.util.*;
+class MinMaxDAC
+{
+	public static void main(String args[])
+	{
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Enter no. of elements");
+		int n=sc.nextInt();
+		int a[]=new int[n];
+
+		System.out.println("Enter elements");
+		for(int i=0;i < n;i++)
+		a[i]=sc.nextInt();		
+
+		int c=0,part=0, d, s;
+		while(part < n)
+		{
+			part=part+3;
+			c++;
+		}
+		part=0;
+		int l=0,h=2;
+		while(part < c)
+		{
+			System.out.println("The part of array is");
+			for(int i= l; i <= h; i++)
+				System.out.println(a[i] + "  ");
+			System.out.println();
+			System.out.println("Maximum no. of this part of array is");
+			int v=a[l];
+			for(int i=l;i <= h;i++)
+				if(a[i] > v)
+					v=a[i];
+			System.out.println(v);
+			System.out.println();
+			System.out.println("Minimum no. of this part of array is");
+			int v1=a[l];
+			for(int i=l;i <= h;i++)
+				if(a[i] < v1)
+					v1=a[i];
+			System.out.println(v1);
+			System.out.println();
+			part++;
+			l=l+3;
+			if((h+3) < n)
+				h=h+3;
+			else
+				h=n-1;
+			
+		}
+		d=s=a[0];
+		for(int i=0;i < n;i++)
+		{
+			if(a[i] > d)
+			d=a[i];
+			
+			if(a[i] < s)
+			s=a[i];
+		}
+		System.out.println("Maximum element is:"+d);
+		System.out.println();
+		System.out.println("Minimum element is:"+s);
+	}	
+}

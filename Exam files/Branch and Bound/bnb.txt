@@ -1,0 +1,82 @@
+import java.util.*;
+import com.ms.util.VectorSort;
+public class BnB
+{
+ private OptimizationProblem P;
+ private double U;
+ private OptimizationProblem currentbest=null;
+ private Vector activeproblems;
+ static double M = Double.MAX_VALUE/1000;
+ private long nodesGenerated = 0;
+ private double elapsedTime = 0;
+ private OptimizationProblemComparison opc;
+
+ public BnB(OptimizationProblem problem){
+ this.P = problem;
+ int n = P.getProblemSize();
+ activeproblems = new Vector(n*n,n);
+ activeproblems.addElement(P);
+ U = M;
+ this.opc = new OptimizationProblemComparison();
+ }
+
+ public OptimizationProblem solve(){
+ OptimizationProblem Pi;
+ OptimizationProblem Ri;
+ double Li;
+ Date d0 = new Date();
+
+ while(activeproblems.size()>0){
+ Pi = selectProblem();
+ Ri = Pi.getRelaxation();
+ Li = Ri.getValue();
+ if(Li<U){ 
+VOL. 4, NO. 1 JOURNAL OF OBJECT TECHNOLOGY 163
+ if(P.isValid(Ri.getSolution())){
+ U = Li;
+ this.currentbest = Ri;
+ } else {
+ // optional upper bounding
+ Ri.performUpperBounding(U);
+
+ // Branching
+ OptimizationProblem[] subPs =
+ Ri.branch();
+ for(int k=0;k<subPs.length;k++){
+ this.activeproblems.addElement(subPs[k]);
+
+ this.nodesGenerated++;
+ } // of for(k)
+ }
+ } // of if better lower bound
+ } // of while(non-empty)
+
+ Date d1 = new Date();
+ this.elapsedTime =
+ (double)(d1.getTime()-d0.getTime())/1000;
+ return currentbest;
+ } // of solve
+
+ private OptimizationProblem selectProblem(){
+ OptimizationProblem selected;
+
+ //Sort the vector by the value
+ VectorSort.sort(this.activeproblems, opc);
+
+ //Select the best element and remove it from the list
+ selected =
+ (OptimizationProblem)this.activeproblems.lastElement();
+ this.activeproblems.removeElementAt(this.activeproblems.size
+()-1);
+ return selected;
+ } // of selectProblem()
+
+ public double getElapsedTime(){
+ return this.elapsedTime;
+ }
+
+ public long getNodeCount(){
+ return this.nodesGenerated;
+ }
+
+} // of class 
